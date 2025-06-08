@@ -17,18 +17,46 @@ inverter.close_port_after_each_call = True
 #inverter.debug = True
 #print(inverter)
 
+#start_timestamp = int(time.time())
+
+# Loop over 20 days in hour increments
+#for hours in range(0, 20 * 24):  # 20 days, 24 hours each day
+#    current_timestamp = start_timestamp + (hours * 60 * 60)  # Adding hour increments to the start timestamp
+
+#    if current_timestamp // (24 * 60 * 60) % 10 == 0:
+#        print(f"Hour {hours}: Inside if condition (max = 100)")
+#    else:
+#        print(f"Hour {hours}: Not inside if condition")
 #sys.exit()
 
+year = 23
+month = 10
+day = 14
+hour = 10
+minute = 14
+second = 0
+date = [ year * 256 + month, day * 256 + hour, minute * 256 + second ]
 
-currentRegister = 500
+#inverter.write_register(62, year * 256 + month, 0, 16, False)
+#inverter.write_register(63, day * 256 + hour, 0, 16, False)
+#inverter.write_register(64, minute * 256 + second, 0, 16, False)
+#inverter.write_registers(62, date )
+#sys.exit()
+#inverter.write_register(108, 50, False )
+
+#zero export test
+#inverter.write_registers( 104, [ ( 65536 + (-50) ) % 65536 ] )
+
+currentRegister = 100
 d = 100
 #if ( len(sys.argv) > 1 ):
 #	start = int(sys.argv[1])
 
 #date = [ 22 * 256 + 7, 11 * 256 + 5, 17 * 256 + 36 ]
-#inverter.write_registers(62, date )
+#inverter.write_registers(104, [ 65436 ] )
+inverter.write_registers(143, [ 15000 ] )
 
-while currentRegister <= 500:
+while currentRegister <= 700:
 	# Register number, number of decimals, function code
 	data = inverter.read_registers(currentRegister, d, 3)
 	n = len(data)

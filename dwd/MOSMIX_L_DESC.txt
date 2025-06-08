@@ -1,0 +1,122 @@
+TTT - Temperature 2m above surface
+Td - Dewpoint 2m above surface
+TX - Maximum temperature - within the last 12 hours
+TN - Minimum temperature - within the last 12 hours
+DD - Wind direction
+FF - Wind speed
+FX1 - Maximum wind gust within the last hour
+FX3 - Maximum wind gust within the last 3 hours
+FXh - Maximum wind gust within the last 12 hours
+RR1c - Total precipitation during the last hour consistent with significant weather
+RR1 - Total precipitation during the last hour
+RR3c - Total precipitation during the last 3 hours consistent with significant weather
+RR3 - Total precipitation during the last 3 hours
+RRS1c - Snow-Rain-Equivalent during the last hour
+RRS3c - Snow-Rain-Equivalent during the last 3 hours
+ww - Significant Weather
+W1W2 - Past weather during the last 6 hours
+N - Total cloud cover
+Neff - Effective cloud cover
+N05 - Cloud cover below 500 ft.
+Nl - Low cloud cover (lower than 2 km)
+Nm - Midlevel cloud cover (2-7 km)
+Nh - High cloud cover (>7 km)
+PPPP - Surface pressure, reduced
+T5cm - Temperature 5cm above surface
+RadS3 - Short wave radiation balance during the last 3 hours
+Rad1h - Global Irradiance
+RadL3 - Long wave radiation balance during the last 3 hours
+VV - Visibility
+SunD1 - Sunshine duration during the last Hour
+FXh25 - Probability of wind gusts >= 25kn within the last 12 hours
+FXh40 - Probability of wind gusts >= 40kn within the last 12 hours
+FXh55 - Probability of wind gusts >= 55kn within the last 12 hours
+wwM - Probability for fog within the last hour
+wwM6 - Probability for fog within the last 6 hours
+wwMh - Probability for fog within the last 12 hours
+Rh00 - Probability of precipitation > 0.0mm during the last 12 hours
+R602 - Probability of precipitation > 0.2mm during the last 6 hours
+Rh02 - Probability of precipitation > 0.2mm during the last 12 hours
+Rd02 - Probability of precipitation > 0.2mm during the last 24 hours
+Rh10 - Probability of precipitation > 1.0mm during the last 12 hours
+R650 - Probability of precipitation > 5.0mm during the last 6 hours
+Rh50 - Probability of precipitation > 5.0mm during the last 12 hours
+Rd50 - Probability of precipitation > 5.0mm during the last 24 hours
+TG - Minimum surface temperature at 5cm within the last 12 hours
+TM - Mean temperature during the last 24 hours
+DRR1 - Duration of precipitation within the last hour
+wwZ - Probability: Occurrence of drizzle within the last hour
+wwD - Probability: Occurrence of stratiform precipitation within the last hour
+wwC - Probability: Occurrence of convective precipitation within the last hour
+wwT - Probability: Occurrence of thunderstorms within the last hour
+wwL - Probability: Occurrence of liquid precipitation within the last hour
+wwS - Probability: Occurrence of solid precipitation within the last hour
+wwF - Probability: Occurrence of freezing rain within the last hour
+wwP - Probability: Occurrence of precipitation within the last hour
+VV10 - Probability: Visibility below 1000m
+E_TTT - Absolute error temperature 2m above surface
+E_FF - Absolute error wind speed 10m above surface
+E_DD - Absolute error wind direction
+E_Td - Absolute error dew point 2m above surface
+RR6 - Total precipitation during the last 6 hours
+RR6c - Total precipitation during the last 6 hours consistent with significant weather
+R600 - Probability of precipitation > 0.0mm during the last 6 hours
+R101 - Probability of precipitation > 0.1 mm during the last hour
+R102 - Probability of precipitation > 0.2 mm during the last hour
+R103 - Probability of precipitation > 0.3 mm during the last hour
+R105 - Probability of precipitation > 0.5 mm during the last hour
+R107 - Probability of precipitation > 0.7 mm during the last hour
+R110 - Probability of precipitation > 1.0 mm during the last hour
+R120 - Probability of precipitation > 2.0 mm during the last hour
+SunD - Yesterdays total sunshine duration
+RSunD - Relative sunshine duration within the last 24 hours
+PSd00 - Probability: relative sunshine duration > 0 % within 24 hours
+PSd30 - Probability: relative sunshine duration > 30 % within 24 hours
+PSd60 - Probability: relative sunshine duration > 60 % within 24 hours
+RRad1 - Global irradiance within the last hour
+PEvap - Potential evapotranspiration within the last 24 hours
+R130 - Probability of precipitation > 3.0 mm during the last hour
+R150 - Probability of precipitation > 5.0 mm during the last hour
+RR1o1 - Probability of precipitation > 10 mm during the last hour
+RR1w1 - Probability of precipitation > 15 mm during the last hour
+RR1u1 - Probability of precipitation > 25 mm during the last hour
+wwD6 - Probability: Occurrence of stratiform precipitation within the last 6 hours
+wwC6 - Probability: Occurrence of convective precipitation within the last 6 hours
+wwT6 - Probability: Occurrence of thunderstorms within the last 6 hours
+wwP6 - Probability: Occurrence of precipitation within the last 6 hours
+wwL6 - Probability: Occurrence of liquid precipitation within the last 6 hours
+wwF6 - Probability: Occurrence of freezing rain within the last 6 hours
+wwS6 - Probability: Occurrence of solid precipitation within the last 6 hours
+wwZ6 - Probability: Occurrence of drizzle within the last 6 hours
+wwMd - Probability: Occurrence of fog within the last 24 hours
+FX625 - Probability: Occurrence of gusts >= 25kn within the last 6 hours
+FX640 - Probability: Occurrence of gusts >= 40kn within the last 6 hours
+FX655 - Probability: Occurrence of gusts >= 55kn within the last 6 hours
+wwDh - Probability: Occurrence of stratiform precipitation within the last 12 hours
+wwCh - Probability: Occurrence of convective precipitation within the last 12 hours
+wwTh - Probability: Occurrence of thunderstorms within the last 12 hours
+wwPh - Probability: Occurrence of precipitation within the last 12 hours
+wwLh - Probability: Occurrence of liquid precipitation within the last 12 hours
+wwFh - Probability: Occurrence of freezing rain within the last 12 hours
+wwSh - Probability: Occurrence of solid precipitation within the last 12 hours
+wwZh - Probability: Occurrence of drizzle within the last 12 hours
+R610 - Probability of precipitation > 1.0 mm during the last 6 hours
+RRh - Total precipitation during the last 12 hours
+RRhc - Total precipitation during the last 12 hours consistent with significant weather
+ww3 - Significant Weather of the last 3 hours
+RRL1c - Total liquid precipitation during the last hour consistent with significant weather
+Rd00 - Probability of precipitation > 0.0 mm during the last 24 hours
+Rd10 - Probability of precipitation > 1.0 mm during the last 24 hours
+RRd - Total precipitation during the last 24 hours
+RRdc - Total precipitation during the last 24 hours consistent with significant weather
+Nlm - Cloud cover low and mid level clouds below 7000 m
+wwPd - Probability: Occurrence of any precipitation within the last 24 hours
+H_BsC - Cloud base of convective clouds
+wwTd - Probability: Occurrence of thunderstorms within the last 24 hours
+E_PPP - Absolute error surface pressure
+SunD3 - Sunshine duration during the last three hours
+WPc11 - Optional significant weather (highest priority) during the last hour
+WPc31 - Optional significant weather (highest priority) during the last 3 hours
+WPc61 - Optional significant weather (highest priority) during the last 6 hours
+WPch1 - Optional significant weather (highest priority) during the last 12 hours
+WPcd1 - Optional significant weather (highest priority) during the last 24 hours

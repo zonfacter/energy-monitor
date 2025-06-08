@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 27, 2023 at 09:05 PM
--- Server version: 8.0.33-0ubuntu0.22.04.2
--- PHP Version: 8.1.2-1ubuntu2.13
+-- Generation Time: Jun 08, 2025 at 03:13 PM
+-- Server version: 8.0.42-0ubuntu0.22.04.1
+-- PHP Version: 8.1.2-1ubuntu2.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -112,6 +112,23 @@ CREATE TABLE `em_wago` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `net`
+--
+
+CREATE TABLE `net` (
+  `row` int UNSIGNED NOT NULL,
+  `timestamp` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `packetsTx` int DEFAULT NULL,
+  `packetsRx` int DEFAULT NULL,
+  `packetsOk` double DEFAULT NULL,
+  `rttMin` double DEFAULT NULL,
+  `rttMax` double DEFAULT NULL,
+  `rttAvg` double DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pv`
 --
 
@@ -197,7 +214,16 @@ CREATE TABLE `pv_E` (
 --
 
 CREATE TABLE `pv_values` (
-  `inverter_timestamp` timestamp NULL DEFAULT NULL
+  `id` int NOT NULL,
+  `inverter_timestamp` timestamp NULL DEFAULT NULL,
+  `batteryImin` smallint UNSIGNED NOT NULL,
+  `batteryImax` smallint UNSIGNED NOT NULL,
+  `socMinReserve` smallint NOT NULL,
+  `socLow` smallint UNSIGNED NOT NULL,
+  `socHigh` smallint UNSIGNED NOT NULL,
+  `socMax` smallint UNSIGNED NOT NULL,
+  `maxOutputPower` smallint UNSIGNED NOT NULL,
+  `minSellPower` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
@@ -258,45 +284,119 @@ CREATE TABLE `weather` (
   `datetime` timestamp NOT NULL,
   `location` varchar(5) NOT NULL,
   `PPPP` float DEFAULT NULL,
+  `E_PPP` float DEFAULT NULL,
   `TX` float DEFAULT NULL,
   `TTT` float DEFAULT NULL,
+  `E_TTT` float DEFAULT NULL,
   `Td` float DEFAULT NULL,
+  `E_Td` float DEFAULT NULL,
   `TN` float DEFAULT NULL,
+  `TG` float DEFAULT NULL,
+  `TM` float DEFAULT NULL,
   `T5cm` float DEFAULT NULL,
   `DD` float DEFAULT NULL,
+  `E_DD` float DEFAULT NULL,
   `FF` float DEFAULT NULL,
+  `E_FF` float DEFAULT NULL,
   `FX1` float DEFAULT NULL,
   `FX3` float DEFAULT NULL,
+  `FX625` float DEFAULT NULL,
+  `FX640` float DEFAULT NULL,
+  `FX655` float DEFAULT NULL,
   `FXh` float DEFAULT NULL,
   `FXh25` float DEFAULT NULL,
   `FXh40` float DEFAULT NULL,
   `FXh55` float DEFAULT NULL,
   `N` float DEFAULT NULL,
   `Neff` float DEFAULT NULL,
+  `Nlm` float DEFAULT NULL,
   `Nh` float DEFAULT NULL,
   `Nm` float DEFAULT NULL,
   `Nl` float DEFAULT NULL,
   `N05` float DEFAULT NULL,
   `VV` float DEFAULT NULL,
+  `VV10` float DEFAULT NULL,
   `wwM` float DEFAULT NULL,
   `wwM6` float DEFAULT NULL,
   `wwMh` float DEFAULT NULL,
+  `wwMd` float DEFAULT NULL,
   `ww` float DEFAULT NULL,
+  `ww3` float DEFAULT NULL,
   `W1W2` float DEFAULT NULL,
+  `wwP` float DEFAULT NULL,
+  `wwP6` float DEFAULT NULL,
+  `wwPh` float DEFAULT NULL,
+  `wwPd` float DEFAULT NULL,
+  `wwZ` float DEFAULT NULL,
+  `wwZ6` float DEFAULT NULL,
+  `wwZh` float DEFAULT NULL,
+  `wwD` float DEFAULT NULL,
+  `wwD6` float DEFAULT NULL,
+  `wwDh` float DEFAULT NULL,
+  `wwC` float DEFAULT NULL,
+  `wwC6` float DEFAULT NULL,
+  `wwCh` float DEFAULT NULL,
+  `wwT` float DEFAULT NULL,
+  `wwT6` float DEFAULT NULL,
+  `wwTh` float DEFAULT NULL,
+  `wwTd` float DEFAULT NULL,
+  `wwS` float DEFAULT NULL,
+  `wwS6` float DEFAULT NULL,
+  `wwSh` float DEFAULT NULL,
+  `wwL` float DEFAULT NULL,
+  `wwL6` float DEFAULT NULL,
+  `wwLh` float DEFAULT NULL,
+  `wwF` float DEFAULT NULL,
+  `wwF6` float DEFAULT NULL,
+  `wwFh` float DEFAULT NULL,
+  `DRR1` float DEFAULT NULL,
+  `RR6c` float DEFAULT NULL,
+  `RRhc` float DEFAULT NULL,
+  `RRdc` float DEFAULT NULL,
   `RR1c` float DEFAULT NULL,
   `RRS1c` float DEFAULT NULL,
+  `RRL1c` float DEFAULT NULL,
   `RR3c` float DEFAULT NULL,
   `RRS3c` float DEFAULT NULL,
+  `R101` float DEFAULT NULL,
+  `R102` float DEFAULT NULL,
+  `R103` float DEFAULT NULL,
+  `R105` float DEFAULT NULL,
+  `R107` float DEFAULT NULL,
+  `R110` float DEFAULT NULL,
+  `R120` float DEFAULT NULL,
+  `R130` float DEFAULT NULL,
+  `R150` float DEFAULT NULL,
+  `RR1o1` float DEFAULT NULL,
+  `RR1w1` float DEFAULT NULL,
+  `RR1u1` float DEFAULT NULL,
+  `R600` float DEFAULT NULL,
   `R602` float DEFAULT NULL,
+  `R610` float DEFAULT NULL,
   `R650` float DEFAULT NULL,
   `Rh00` float DEFAULT NULL,
   `Rh02` float DEFAULT NULL,
   `Rh10` float DEFAULT NULL,
   `Rh50` float DEFAULT NULL,
+  `Rd00` float DEFAULT NULL,
   `Rd02` float DEFAULT NULL,
+  `Rd10` float DEFAULT NULL,
   `Rd50` float DEFAULT NULL,
+  `SunD` float DEFAULT NULL,
+  `RSunD` float DEFAULT NULL,
+  `PSd00` float DEFAULT NULL,
+  `PSd30` float DEFAULT NULL,
+  `PSd60` float DEFAULT NULL,
+  `RRad1` float DEFAULT NULL,
   `Rad1h` float DEFAULT NULL,
-  `SunD1` float DEFAULT NULL
+  `SunD1` float DEFAULT NULL,
+  `SunD3` float DEFAULT NULL,
+  `PEvap` float DEFAULT NULL,
+  `WPc11` float DEFAULT NULL,
+  `WPc31` float DEFAULT NULL,
+  `WPc61` float DEFAULT NULL,
+  `WPch1` float DEFAULT NULL,
+  `WPcd1` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
@@ -320,6 +420,12 @@ ALTER TABLE `em_wago`
   ADD KEY `unix_ts` (`unix_ts`);
 
 --
+-- Indexes for table `net`
+--
+ALTER TABLE `net`
+  ADD PRIMARY KEY (`row`);
+
+--
 -- Indexes for table `pv`
 --
 ALTER TABLE `pv`
@@ -333,6 +439,12 @@ ALTER TABLE `pv`
 ALTER TABLE `pv_E`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `date` (`date`);
+
+--
+-- Indexes for table `pv_values`
+--
+ALTER TABLE `pv_values`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `styleboiler`
@@ -353,7 +465,8 @@ ALTER TABLE `sun`
 --
 ALTER TABLE `weather`
   ADD PRIMARY KEY (`timestamp`,`location`),
-  ADD KEY `location` (`location`);
+  ADD KEY `location` (`location`),
+  ADD KEY `timestamp` (`timestamp`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -372,6 +485,12 @@ ALTER TABLE `em_wago`
   MODIFY `row` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `net`
+--
+ALTER TABLE `net`
+  MODIFY `row` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `pv`
 --
 ALTER TABLE `pv`
@@ -382,6 +501,12 @@ ALTER TABLE `pv`
 --
 ALTER TABLE `pv_E`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `pv_values`
+--
+ALTER TABLE `pv_values`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `styleboiler`

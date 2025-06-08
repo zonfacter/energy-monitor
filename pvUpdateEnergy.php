@@ -6,6 +6,7 @@ $mysqli = new mysqli( $cred[0], $cred[1], $cred[2], $cred[3] );
 if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: " . $mysqli->connect_error;
 } else {
+	/*
 	$sql = 
 	"INSERT INTO `pv_E` ( `id`, `date`, `pv`, `grid_out`, `grid_in`, `battery_charge`, `battery_discharge`, `load`, `gen`, `em_export`, `em_import`)
 		SELECT * FROM (SELECT
@@ -27,6 +28,47 @@ if ($mysqli->connect_errno) {
 		GROUP BY
 			DATE(`timestamp`)) AS `t`
 	ON DUPLICATE KEY UPDATE `pv` = `t`.`pv`,`grid_out` = `t`.`grid_out`,`grid_in` = `t`.`grid_in`,`battery_charge` = `t`.`battery_charge`,`battery_discharge` = `t`.`battery_discharge`,`load` = `t`.`load`,`gen` = `t`.`gen`,`em_export` = `t`.`em_export`,`em_import` = `t`.`em_import`";
+	*/
+	$sql = 
+	"INSERT INTO `pv_E` ( `id`, `date`, `pv`, `grid_out`, `grid_in`, `battery_charge`, `battery_discharge`, `load`, `gen`, `em_export`, `em_import`)
+		SELECT
+			`u`.`id`,
+			`u`.`date`,
+			`u`.`pv`,
+			`u`.`grid_out`,
+			`u`.`grid_in`,
+			`u`.`battery_charge`,
+			`u`.`battery_discharge`,
+			CASE WHEN `u`.`date` >= '2023-09-25' THEN GREATEST( CAST( `u`.`load` - `u`.`daySec` * 21.408 AS SIGNED ), 0 ) ELSE `u`.`load` END AS `load`,
+			`u`.`gen`,
+			`u`.`em_export`,
+			`u`.`em_import`
+		FROM (
+			SELECT
+				*,
+				CASE WHEN `t`.`date` = CURDATE() THEN TIME_TO_SEC(CURTIME()) / 86400 ELSE 1.0 END AS `daySec`
+			FROM (
+				SELECT
+					NULL AS `id`,
+					DATE(`timestamp`) AS `date`,
+					(MAX(`pv_total_E`)-MIN(`pv_total_E`)) AS `pv`,
+					(MAX(`grid_out_total_E`)-MIN(`grid_out_total_E`)) AS `grid_out`,
+					(MAX(`grid_in_total_E`)-MIN(`grid_in_total_E`)) AS `grid_in`,
+					(MAX(`battery_charge_total_E`)-MIN(`battery_charge_total_E`)) AS `battery_charge`,
+					(MAX(`battery_discharge_total_E`)-MIN(`battery_discharge_total_E`)) AS `battery_discharge`,
+					(MAX(`load_total_E`)-MIN(`load_total_E`)) AS `load`,
+					(MAX(`gen_total_E`)-MIN(`gen_total_E`)) AS `gen`,
+					(MAX(`em_export_E`)-MIN(`em_export_E`)) AS `em_export`,
+					(MAX(`em_import_E`)-MIN(`em_import_E`)) AS `em_import`
+				FROM
+					`log`.`pv`
+				WHERE
+					DATE(`timestamp`) >= subdate(CURDATE(),1)
+				GROUP BY
+					DATE(`timestamp`)
+			) AS `t`
+		) AS `u`
+		ON DUPLICATE KEY UPDATE `pv` = `u`.`pv`,`grid_out` = `u`.`grid_out`,`grid_in` = `u`.`grid_in`,`battery_charge` = `u`.`battery_charge`,`battery_discharge` = `u`.`battery_discharge`,`load` = CASE WHEN `u`.`date` >= '2023-09-25' THEN GREATEST( CAST( `u`.`load` - `u`.`daySec` * 21.408 AS SIGNED ), 0 ) ELSE `u`.`load` END,`gen` = `u`.`gen`,`em_export` = `u`.`em_export`,`em_import` = `u`.`em_import`";
 	$res = $mysqli->query( $sql );
 	/*
 	$sql = 

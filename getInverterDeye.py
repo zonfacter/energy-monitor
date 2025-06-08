@@ -60,10 +60,16 @@ inverter.close_port_after_each_call = True
 #inverter.debug = True
 #print(inverter)
 
+#zero export power to -100 ((65536 + -100)%65536)
+#inverter.write_registers( 104, [ ( 65536 + (-50) ) % 65536 ] )
+
 startTime = time.time()
 # avg over samples
 samples = 0
 errors = 0
+lastSocMinReserve = 0
+lastBatteryCC = 0
+lastMaxOutputPower = 0
 while True:
 	start = 500
 	d = 100
@@ -84,7 +90,7 @@ while True:
 				if ( j in deye.ref_registers ):
 					r = deye.ref_registers[j]
 					if ( r[deye.reg_type] == 's16' ):
-						r[deye.reg_value] += data[i] - ((data[i] & 0x8000) << 1)
+						r[deye.reg_value] += (data[i] - ((data[i] & 0x8000) << 1)) + r[deye.reg_offset]
 					elif ( r[deye.reg_type] == 'u32' ):
 						r[deye.reg_value] += data[i] + (data[i+1] << 16)
 					elif ( r[deye.reg_type] == 'v16' ):
@@ -140,6 +146,103 @@ while True:
 					inverter.write_register(133, 1, 0, 16, False)
 			"""
 			
+			#adjust battery charge current
+			Imin = 10
+			Imax = 50
+			socMinReserve = 15
+			socLow = 30
+			socHigh = 75
+			socMax = 85
+			minSellPower = 0
+			batteryFullAge = 10000000
+			mycursor.execute("SELECT `batteryImin`, `batteryImax`, `socMinReserve`, `socLow`, `socHigh`, `socMax`, `minSellPower` FROM `pv_values` WHERE `id` = 1 LIMIT 1;")
+			myresult = mycursor.fetchall()
+			for x in myresult:
+				Imin = x[0]
+				Imax = x[1]
+				socMinReserve = x[2]
+				socLow = x[3]
+				socHigh = x[4]
+				socMax = x[5]
+				minSellPower = x[6]
+
+			#every 10 days force fill battery
+			mycursor.execute("SELECT ROUND(UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(`timestamp`)) AS `ageSec` FROM `pv` WHERE `battery_SOC` >= 100 AND `timestamp` <= NOW() - INTERVAL 1 DAY ORDER BY `timestamp` DESC LIMIT 1;")
+			myresult = mycursor.fetchall()
+			for x in myresult:
+				batteryFullAge = x[0]
+			if batteryFullAge > (24 * 60 * 60 * 10):
+				#print('--100')
+				socHigh = 90
+				socMax = 100
+			#else:
+				#print(int(now / (24 * 60 * 60)) % 10)
+
+			cc = Imin
+
+			#soc = deye.ref_registers[588][deye.reg_value] / samples
+			data = inverter.read_registers(587, 2, 3)
+			batteryV = data[0] / 100.0
+			soc = data[1]
+			data = inverter.read_registers(653, 1, 3)
+			loadpower = data[0]
+			data = inverter.read_registers(667, 7, 3)
+			pvpower = data[0] + data[5] + data[6]
+
+			if ( soc < 1 ) :
+				#just in case something went wrong
+				cc = Imin
+			elif ( soc < socLow ) :
+				#ramp up charge current from 0%soc to socLow from Imin to Imax
+				cc = ((Imax - Imin) / socLow) * soc + Imin
+			elif ( soc > socMax ) :
+				#do not charge at all above socMax
+				cc = 0
+			elif ( soc > socHigh ) :
+				#ramp down charge current from socHigh down to socMax from Imax down to 0
+				cc = ( -Imax / ( socMax - socHigh ) ) * soc + Imax / ( 1 - (socHigh / socMax) )
+			else :
+				cc = Imax
+
+			#adjust for total pvp power
+			limitBatteryCharge = (pvpower - loadpower - minSellPower ) / batteryV
+			cc = round( min( limitBatteryCharge, cc ) )
+
+			if  ( cc < 0 ) :
+				cc = 0
+			if  ( cc > Imax ) :
+				cc = Imax
+
+			if ( cc > lastBatteryCC ) :
+				cc = lastBatteryCC + 2
+			if ( cc < lastBatteryCC ) :
+				cc = lastBatteryCC - 2
+
+			if ( cc != lastBatteryCC ) :
+				#print( '{soc:3n},{batteryV:6f} : {cc:6n} - {pvpower:6n}'.format(soc=soc,batteryV=batteryV,cc=cc,pvpower=pvpower) )
+				inverter.write_register(108, cc, False )
+				lastBatteryCC = cc
+
+			if ( lastSocMinReserve != socMinReserve ) :
+				#print( 'socmin={socMinReserve:3n}'.format(socMinReserve=socMinReserve) )
+				inverter.write_register(166, socMinReserve, False )
+				inverter.write_register(167, socMinReserve, False )
+				inverter.write_register(168, socMinReserve, False )
+				inverter.write_register(169, socMinReserve, False )
+				inverter.write_register(170, socMinReserve, False )
+				inverter.write_register(171, socMinReserve, False )
+				lastSocMinReserve = socMinReserve
+
+			#update maxOutputPower
+			mycursor.execute("SELECT `maxOutputPower` FROM `pv_values` WHERE `id` = 1 LIMIT 1;")
+			myresult = mycursor.fetchall()
+			for x in myresult:
+				maxOutputPower = x[0]
+			
+			if ( maxOutputPower != lastMaxOutputPower ) :
+				inverter.write_register(143, maxOutputPower, False )
+				lastMaxOutputPower = maxOutputPower
+
 			#insert to db
 			val = []
 			for r in deye.registers:
