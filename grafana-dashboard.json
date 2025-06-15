@@ -1123,7 +1123,7 @@
 				  "id": "color",
 				  "value": {
 					"fixedColor": "#ff0000",
-					"mode": "fixed"
+					"mode": "thresholds"
 				  }
 				},
 				{
@@ -1136,21 +1136,21 @@
 				},
 				{
 				  "id": "custom.fillOpacity",
-				  "value": 52
+				  "value": 0
 				},
 				{
 				  "id": "custom.lineStyle",
 				  "value": {
 					"dash": [
-					  10,
-					  10
+					  0,
+					  3
 					],
-					"fill": "dash"
+					"fill": "dot"
 				  }
 				},
 				{
 				  "id": "custom.lineWidth",
-				  "value": 4
+				  "value": 2
 				},
 				{
 				  "id": "custom.transform",
@@ -1158,7 +1158,7 @@
 				},
 				{
 				  "id": "custom.gradientMode",
-				  "value": "opacity"
+				  "value": "scheme"
 				},
 				{
 				  "id": "unit",
@@ -1167,6 +1167,29 @@
 				{
 				  "id": "custom.axisPlacement",
 				  "value": "hidden"
+				},
+				{
+				  "id": "thresholds",
+				  "value": {
+					"mode": "absolute",
+					"steps": [
+					  {
+						"color": "#f80303"
+					  },
+					  {
+						"color": "semi-dark-orange",
+						"value": -60
+					  },
+					  {
+						"color": "yellow",
+						"value": -50
+					  },
+					  {
+						"color": "#1c99d424",
+						"value": -20
+					  }
+					]
+				  }
 				}
 			  ]
 			}
@@ -6987,11 +7010,11 @@
 	},
 	"time": {
 	  "from": "now-3d",
-	  "to": "now+5d"
+	  "to": "now+4d"
 	},
 	"timepicker": {},
 	"timezone": "",
 	"title": "PV",
 	"uid": "mJkcM_p4z",
-	"version": 508
+	"version": 510
   }
